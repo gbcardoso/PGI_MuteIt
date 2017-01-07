@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEvent">
+
+
+    <RelativeLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:orientation="vertical"
+        tools:context=".AddEvent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+       >
+
+        <EditText
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textPersonName"
+            android:ems="10"
+            android:id="@+id/nameText"
+            android:hint="Name of the event" />
+
+        <EditText
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textPersonName"
+            android:ems="10"
+            android:id="@+id/hash"
+            android:hint="Hashtag"
+            android:layout_below="@id/nameText"/>
+
+        <TextView
+            android:text="s1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hash"
+            android:layout_marginTop="30dp"
+            android:id="@+id/dateinit"
+            android:onClick="onClick"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="e1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hourinit"
+            android:onClick="onClick"
+            android:layout_alignRight="@+id/dateinit"
+            android:layout_below="@+id/hash"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:text="s2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateend"
+            android:onClick="onClick"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/dateinit"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:text="e2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hourend"
+            android:onClick="onClick"
+            android:layout_below="@+id/hourinit"
+            android:layout_alignRight="@+id/dateend"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+
+        <TextView
+            android:text="Som"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/somt"
+            android:layout_below="@+id/dateend"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="60dp"/>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hourend"
+            android:layout_alignRight="@+id/somt"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="60dp"
+            android:id="@+id/ssom"
+            android:checked="false"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:text="Silêncio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/silenciot"
+            android:layout_below="@+id/somt"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ssilencio"
+            android:layout_alignRight="@id/silenciot"
+            android:layout_below="@+id/ssom"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:text="Vibrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vibrart"
+            android:layout_below="@+id/silenciot"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/svibrar"
+            android:layout_below="@id/ssilencio"
+            android:layout_alignRight="@id/vibrart"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lista"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|start"
+        android:background="#ffeeeeee"/>
+
+</android.support.v4.widget.DrawerLayout>
