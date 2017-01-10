@@ -28,4 +28,9 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    public void goCredtis(View view){
+        Intent intent = new Intent(this,creditosListaNomes.class);
+        startActivity(intent);
+    }
+
 }

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ public class AddEvent extends AppCompatActivity {
 
     //*********************Time and Date Picker*********************
     private int mYear, mMonth, mDay, mHour, mMinute;
-    CompoundButton ssilencio, ssom;
+    CompoundButton ssilencio, ssom, svibrar;
     TextView dateini, dateend, timeinit, timeend;
 
     //*********************Add Event*********************
@@ -62,6 +63,8 @@ public class AddEvent extends AppCompatActivity {
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        /*data butoes*/
         dateini = (TextView) findViewById(R.id.dateinit);
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat dfaux = new SimpleDateFormat("yyyy-MM-dd");
@@ -78,8 +81,11 @@ public class AddEvent extends AppCompatActivity {
         timeend = (TextView) findViewById(R.id.hourend);
         timeend.setText(tf.format(new Date()));
         endTime="T"+timeend.getText()+":00";
+
+        /*******************************/
         ssilencio = (CompoundButton) findViewById(R.id.ssilencio);
         ssom = (CompoundButton) findViewById(R.id.ssom);
+        svibrar = (CompoundButton) findViewById(R.id.svibrar);
         nameText=(EditText) findViewById(R.id.nameText);
 
         ////*********************Listener Switches*********************
@@ -91,21 +97,21 @@ public class AddEvent extends AppCompatActivity {
                     case R.id.ssom:
                         if (isChecked) {
                             ssilencio.setChecked(false);
-                            //ssilencio.setEnabled(false);
-                            break;
-                        } else {
-                            ssilencio.setEnabled(true);
-                            break;
+                            svibrar.setChecked(false);
                         }
+                        break;
                     case R.id.ssilencio:
                         if (isChecked) {
                             ssom.setChecked(false);
-                            //ssom.setEnabled(false);
-                            break;
-                        } else {
-                            ssom.setEnabled(true);
-                            break;
+                            svibrar.setChecked(false);
                         }
+                        break;
+                    case R.id.svibrar:
+                        if(isChecked) {
+                            ssilencio.setChecked(false);
+                            ssom.setChecked(false);
+                        }
+                        break;
                 }
             }
 
@@ -114,25 +120,32 @@ public class AddEvent extends AppCompatActivity {
         //on each switch
         ((Switch) findViewById(R.id.ssilencio)).setOnCheckedChangeListener(multiListener);
         ((Switch) findViewById(R.id.ssom)).setOnCheckedChangeListener(multiListener);
+        ((Switch) findViewById(R.id.svibrar)).setOnCheckedChangeListener(multiListener);
 
 
     }
 
 
 
-    private void addDrawerItems() {
+   private void addDrawerItems() {
         String[] list = {"Adicionar Evento", "Agenda", "Estatisticas", "Créditos"};
         mdrawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         mdrawerList.setAdapter(mdrawerAdapter);
         mdrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position==1){
-                    Intent intent=new Intent(AddEvent.this,ListEvents.class);
-                    intent.putExtra("from","AddEvent");
+                if(position==0){
+                    Intent intent = new Intent(AddEvent.this, AddEvent.class);
+
                     startActivity(intent);
                 }
-                Toast.makeText(AddEvent.this, "Eheheh", Toast.LENGTH_SHORT).show();
+                else if(position==3){
+                    Intent intent = new Intent(AddEvent.this,creditosListaNomes.class);
+                    startActivity(intent);
+                }else {
+
+                    Toast.makeText(AddEvent.this, "Coming Soon!!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
