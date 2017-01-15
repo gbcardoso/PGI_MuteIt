@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListEvents">
 
-    <ListView
+    <RelativeLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:orientation="vertical"
+        tools:context=".ListEvents"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        >
+    <ListView
         android:id="@+id/list_events_view"
-        android:divider="#83ADC7"
-        android:dividerHeight="1dp" />
+        android:textSize = "15dp"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/intro"
+        android:listSelector="@android:color/transparent"
+        >
+    </ListView>
+</RelativeLayout>
 
-</LinearLayout>
+
+    <ListView
+    android:id="@+id/lista"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="left|start"
+    android:background="#ffeeeeee"/>
+
+</android.support.v4.widget.DrawerLayout>

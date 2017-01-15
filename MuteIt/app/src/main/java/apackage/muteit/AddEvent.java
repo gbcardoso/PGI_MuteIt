@@ -5,7 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,12 +31,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.api.client.util.DateTime;
+
 import java.util.Date;
 
 public class AddEvent extends AppCompatActivity {
 
 //*****************Variable Declaration*****************
-
+    ArrayList<Evento> aux;
     //*********************Menu Bar*********************
 
     private ListView mdrawerList;
@@ -51,7 +55,7 @@ public class AddEvent extends AppCompatActivity {
     //*********************Add Event*********************
     String name=new String();String startTime=new String(); String endTime=new String(); String tag=new String();
     String startDate=new String(); String endDate=new String(); String totalstart=new String(); String totalend=new String();
-    EditText nameText;
+    EditText nameText,hashtag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,9 @@ public class AddEvent extends AppCompatActivity {
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        /**/
+        aux = (ArrayList<Evento>)getIntent().getExtras().get("listaEventos");
+
 
         /*data butoes*/
         dateini = (TextView) findViewById(R.id.dateinit);
@@ -87,7 +94,7 @@ public class AddEvent extends AppCompatActivity {
         ssom = (CompoundButton) findViewById(R.id.ssom);
         svibrar = (CompoundButton) findViewById(R.id.svibrar);
         nameText=(EditText) findViewById(R.id.nameText);
-
+        hashtag=(EditText) findViewById(R.id.hash);
         ////*********************Listener Switches*********************
 
         CompoundButton.OnCheckedChangeListener multiListener = new CompoundButton.OnCheckedChangeListener() {
@@ -136,11 +143,16 @@ public class AddEvent extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
                     Intent intent = new Intent(AddEvent.this, AddEvent.class);
-
+                    intent.putExtra("listaEventos",aux);
+                    startActivity(intent);
+                }else if(position==1){
+                    Intent intent = new Intent(AddEvent.this,ListEvents.class);
+                    intent.putExtra("listaEventos",aux);
                     startActivity(intent);
                 }
                 else if(position==3){
                     Intent intent = new Intent(AddEvent.this,creditosListaNomes.class);
+                    intent.putExtra("listaEventos",aux);
                     startActivity(intent);
                 }else {
 
@@ -199,13 +211,31 @@ public class AddEvent extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         if(id==R.id.save){
-            create();
+            if(ssilencio.isChecked() || ssom.isChecked() || svibrar.isChecked()){
+                Date startdate = new Date(Integer.parseInt((startDate.split("-")[0])),
+                        Integer.parseInt(startDate.split("-")[1]),
+                        Integer.parseInt(startDate.split("-")[2]),
+                        Integer.parseInt(startTime.split("T")[1].split(":")[0]),
+                        Integer.parseInt(startTime.split("T")[1].split(":")[1]));
+                Date enddate = new Date(Integer.parseInt((endDate.split("-")[0])),
+                        Integer.parseInt(endDate.split("-")[1]),
+                        Integer.parseInt(endDate.split("-")[2]),
+                        Integer.parseInt(endTime.split("T")[1].split(":")[0]),
+                        Integer.parseInt(endTime.split("T")[1].split(":")[1]));
+                if(enddate.after(startdate)) {
+                    Toast.makeText(AddEvent.this, "Calendario " + startdate +"after "+enddate, Toast.LENGTH_SHORT).show();
+                    create(startdate,enddate);
+
+                }else{
+                    Toast.makeText(AddEvent.this, "Valores de datas errados", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+            }
             return true;
         }
         // Activate the navigation drawer toggle
@@ -218,7 +248,6 @@ public class AddEvent extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_settings);
         menu.clear();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -316,20 +345,23 @@ public class AddEvent extends AppCompatActivity {
 
     }
 
-    public void create(){
+    public void create(Date startdate, Date enddate){
+        int profile;
         name=nameText.getText().toString();
-        totalstart=startDate+startTime;
-        Log.d("startdate",startDate);
-        totalend=endDate+endTime;
-        Intent i = new Intent(this, CalendarObj.class);
-        i.putExtra("name", name);
-        i.putExtra("tag",tag);
-        i.putExtra("totalend",totalend);
-        i.putExtra("totalstart",totalstart);
-        i.putExtra("from","AddEvent");
+        tag = hashtag.getText().toString();
+        if(ssilencio.isChecked())
+            profile=0;
+        else if(svibrar.isChecked())
+            profile=1;
+        else
+            profile=2;
+        Evento newEvento = new Evento(name,tag,startdate,enddate,profile);
+        aux.add(newEvento);
+        Intent i = new Intent(this, MainMenu.class);
+        i.putExtra("listaEventos",aux);
+        Toast.makeText(getApplicationContext(), "novo Evento criado com sucesso", Toast.LENGTH_SHORT).show();
         startActivity(i);
     }
-
 
 
 }

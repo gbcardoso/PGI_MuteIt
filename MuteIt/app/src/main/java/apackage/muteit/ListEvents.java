@@ -3,10 +3,16 @@ package apackage.muteit;
 import android.app.Activity;
 import android.app.usage.UsageEvents;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,73 +35,148 @@ import java.util.List;
 public class ListEvents extends AppCompatActivity {
 
     ArrayList <Evento> aux ;
-    ArrayList <String> eventlist;
-    ListView viewList;
-    ArrayAdapter<String> adapter;
-    static final int GET_EVENTS=1;
+    //*********************Menu Bar*********************
+
+    private ListView mdrawerList;
+    private ArrayAdapter<String> mdrawerAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private String ActivityTitle;
+
+
+    private void addDrawerItems() {
+        String[] list = {"Adicionar Evento", "Agenda", "Estatisticas", "Créditos"};
+        mdrawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        mdrawerList.setAdapter(mdrawerAdapter);
+        mdrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position==0){
+                    Intent intent = new Intent(ListEvents.this, AddEvent.class);
+                    intent.putExtra("listaEventos",aux);
+                    startActivity(intent);
+                }
+                else if(position==1){
+                    Intent intent = new Intent(ListEvents.this,ListEvents.class);
+                    intent.putExtra("listaEventos",aux);
+                    startActivity(intent);
+                }
+                else if(position==3){
+                    Intent intent = new Intent(ListEvents.this,creditosListaNomes.class);
+                    intent.putExtra("listaEventos",aux);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(ListEvents.this, "Coming Soon!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(ActivityTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+    }
+
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menu.clear();
+        getMenuInflater().inflate(R.menu.menustandard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        // Activate the navigation drawer toggle
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menustandard, menu);
+        super.onPrepareOptionsMenu(menu);
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Create","ListEvents");
-        viewList=(ListView)findViewById(R.id.list_events_view);
         setContentView(R.layout.list_events);
 
-        if(getIntent().getExtras().getString("from").equals("CalendarObj")){
-            Log.d("ENTER","INTENT RECIEVED");
-            aux=(ArrayList)getIntent().getSerializableExtra("auxresult");
-            ArrayList<String>eventlist=new ArrayList<>();
-            for(Evento e:aux){
-                String[]datainicio=e.data_start.toString().split("T");
-                String[]datafim=e.data_end.toString().split("T");
+        mdrawerList = (ListView) findViewById(R.id.lista);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActivityTitle = getTitle().toString();
+        addDrawerItems();
+        setupDrawer();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-                datainicio[1]=datainicio[1].substring(0,datainicio[1].length()-8);
-                String auxano=datainicio[0].substring(0,4);
-                String auxmes=datainicio[0].substring(5,7);
-                String auxdia=datainicio[0].substring(8,datainicio[0].length());
-                datainicio[0]=""+auxdia+"-"+auxmes+"-"+auxano;
-                auxano=datafim[0].substring(0,4);
-                auxmes=datafim[0].substring(5,7);
-                auxdia=datafim[0].substring(8,datainicio[0].length());
-                datafim[0]=""+auxdia+"-"+auxmes+"-"+auxano;
+        aux = (ArrayList<Evento>) getIntent().getExtras().get("listaEventos");
 
-                datafim[1]=datafim[1].substring(0,datafim[1].length()-8);
-
-                eventlist.add(""+e.name+"\n"+datainicio[0]+" "+datainicio[1]+" - "+datafim[0]+" "+datafim[1]);
-            }
-            setContentView(R.layout.list_events);
-            addDrawerItems(eventlist);
-        }
-        else{
-            Intent intent=new Intent (this,CalendarObj.class);
-            intent.putExtra("from","Agenda");
-            startActivity(intent);
-            finish();
-
-        }
+        loadLista();
+        if(aux.isEmpty())
+            Toast.makeText(ListEvents.this, "Lista de Eventos vazia", Toast.LENGTH_SHORT).show();
     }
 
-    private void addDrawerItems(ArrayList<String> eventlist) {
-        viewList=(ListView)findViewById(R.id.list_events_view);
-        viewList.setFocusableInTouchMode(false);
-        viewList.setFocusable(false);
-        viewList.setSelector(android.R.color.transparent);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, eventlist){
+
+    protected void loadLista(){
+        ListView list = (ListView) findViewById(R.id.list_events_view);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1);
+        for(Evento e:aux){
+            adapter.add(e.name);
+        }
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent){
-                // Get the Item from ListView
-                View view = super.getView(position, convertView, parent);
-
-                // Initialize a TextView for ListView each Item
-                TextView tv = (TextView) view.findViewById(android.R.id.text1);
-
-                // Set the text color of TextView (ListView Item)
-                tv.setTextColor(Color.BLACK);
-
-                // Generate ListView Item using TextView
-                return view;
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Evento clicked = aux.get(i);
+                Toast.makeText(getApplicationContext(),
+                        clicked.name +" #"+clicked.hashtag+" Começa:"+clicked.data_start+" Termina:"+clicked.data_end+" Profile:"+clicked.profileToString()
+                        ,Toast.LENGTH_SHORT).show();
             }
-        };
-        viewList.setAdapter(adapter);
-
+        });
+        list.setAdapter(adapter);
     }
+
 }

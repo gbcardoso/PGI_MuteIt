@@ -24,7 +24,6 @@
         <activity android:name=".MainMenu"/>
 
         <activity android:name=".AddEvent"/>
-        <activity android:name=".CalendarObj"/>
         <activity android:name=".ListEvents"/>
         <activity android:name=".creditosListaNomes"/>
     </application>

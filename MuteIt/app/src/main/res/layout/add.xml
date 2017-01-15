@@ -32,14 +32,14 @@
             android:id="@+id/nameText"
             android:hint="Name of the event" />
 
-        <TextView
+        <EditText
             android:textSize="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textPersonName"
             android:ems="10"
             android:id="@+id/hash"
-            android:text="#Hashtag"
+            android:hint="#Hashtag"
             android:layout_below="@id/nameText"/>
 
 

@@ -2,10 +2,9 @@ package apackage.muteit;
 
 import android.media.AudioManager;
 
-import com.google.api.client.util.DateTime;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -16,18 +15,27 @@ public class Evento implements Serializable{
 
     String name;
     String hashtag;
-    DateTime data_start;
-    DateTime data_end;
+    Date data_start;
+    Date data_end;
     int profile;
 
 
-    public Evento(String name, String hashtag, DateTime data_start, DateTime data_end, int profile){
+    public Evento(String name, String hashtag, Date data_start, Date data_end, int profile){
         /*profile must be 1,2,3*/
         this.name = name;
         this.hashtag = hashtag;
         this.data_start = data_start;
         this.data_end = data_end;
         this.profile = profile;
+    }
+
+    public String profileToString(){
+        if(profile==0)
+            return "Silêncio";
+        else if(profile==1)
+            return "Vibrar";
+        else
+            return "Som";
     }
 
     /*public void compareEvento(Evento newe){

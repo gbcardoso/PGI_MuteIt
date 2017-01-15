@@ -16,6 +16,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent startIntent = new Intent(SplashActivity.this, ForegroundService.class);
         startService(startIntent);
         Intent intent = new Intent(this, MainMenu.class);
+        intent.putExtra("from","Splash");
         startActivity(intent);
         finish();
     }

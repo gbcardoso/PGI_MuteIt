@@ -16,8 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class creditosListaNomes extends AppCompatActivity{
+    ArrayList<Evento> aux;
     //*********************Menu Bar*********************
 
     private ListView mdrawerList;
@@ -36,10 +39,16 @@ public class creditosListaNomes extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
                     Intent intent = new Intent(creditosListaNomes.this, AddEvent.class);
+                    intent.putExtra("listaEventos",aux);
+                    startActivity(intent);
+                }else if(position==1){
+                    Intent intent = new Intent(creditosListaNomes.this,ListEvents.class);
+                    intent.putExtra("listaEventos",aux);
                     startActivity(intent);
                 }
                 else if(position==3){
                     Intent intent = new Intent(creditosListaNomes.this,creditosListaNomes.class);
+                    intent.putExtra("listaEventos",aux);
                     startActivity(intent);
                 }else {
                     Toast.makeText(creditosListaNomes.this, "Coming Soon!!", Toast.LENGTH_SHORT).show();
@@ -97,10 +106,6 @@ public class creditosListaNomes extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -111,10 +116,9 @@ public class creditosListaNomes extends AppCompatActivity{
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_settings);
         menu.clear();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menustandard, menu);
         super.onPrepareOptionsMenu(menu);
         return true;
     }
@@ -135,6 +139,8 @@ public class creditosListaNomes extends AppCompatActivity{
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        aux = (ArrayList<Evento>)getIntent().getExtras().get("listaEventos");
         //Getting hanle of list
         ListView list = (ListView) findViewById(R.id.listAutores);
 
