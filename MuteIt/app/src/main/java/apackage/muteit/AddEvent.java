@@ -149,8 +149,7 @@ public class AddEvent extends AppCompatActivity {
                     Intent intent = new Intent(AddEvent.this,ListEvents.class);
                     intent.putExtra("listaEventos",aux);
                     startActivity(intent);
-                }
-                else if(position==3){
+                }else if(position==3){
                     Intent intent = new Intent(AddEvent.this,creditosListaNomes.class);
                     intent.putExtra("listaEventos",aux);
                     startActivity(intent);
@@ -347,6 +346,7 @@ public class AddEvent extends AppCompatActivity {
 
     public void create(Date startdate, Date enddate){
         int profile;
+        Evento temp;
         name=nameText.getText().toString();
         tag = hashtag.getText().toString();
         if(ssilencio.isChecked())
@@ -356,7 +356,16 @@ public class AddEvent extends AppCompatActivity {
         else
             profile=2;
         Evento newEvento = new Evento(name,tag,startdate,enddate,profile);
-        aux.add(newEvento);
+
+        int k;
+        for (k=0; k<aux.size();k++){
+            temp=aux.get(k);
+            if (temp.data_start.after(newEvento.data_start)||(!temp.data_start.before(newEvento.data_start)&&temp.data_end.after(newEvento.data_end))){
+                break;
+            }
+        }
+        aux.add(k,newEvento);
+
         Intent i = new Intent(this, MainMenu.class);
         i.putExtra("listaEventos",aux);
         Toast.makeText(getApplicationContext(), "novo Evento criado com sucesso", Toast.LENGTH_SHORT).show();
